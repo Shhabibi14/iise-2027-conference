@@ -23,7 +23,7 @@ Status values: `Pending` · `In progress` · `Done` · `Skipped` · `N/A`
 | # | Priority | Task | Details | Status |
 |---|---|---|---|---|
 | 5 | Must | Decide tense of "We evaluate" / "Measures include" | Present tense sounds like the study is finished. Fine **only if** you will have results by the **paper deadline January 17**. If not, switch to "We will evaluate" (safer). | Done — switched to "We will evaluate". User confirmed this is a framework paper with no empirical results by Jan 17. "Measures include" kept as-is (it describes the planned measures, not finished reporting). |
-| 6 | Contingency | Length contingency if portal counts hyphenated words as two | After fixes #2–#3, body is ≤247 words. If the portal counts "cost-aware" and similar as two words and it runs over 250, shorten "such as machine reliability, crew skill, and supplier quality" → "such as crew skill and supplier quality". | Pending |
+| 6 | Contingency | Length contingency if portal counts hyphenated words as two | After fixes #2–#3, body is ≤247 words. If the portal counts "cost-aware" and similar as two words and it runs over 250, shorten "such as machine reliability, crew skill, and supplier quality" → "such as crew skill and supplier quality". | Done (applied preemptively, 247 → 245 words). **Residual risk:** 7 hyphenated tokens remain (cost-aware, discrete-event, five-station, formula-based, one-week, ramp-up, re-derivation); if portal splits hyphens the count becomes ~252 — still 2 over. Watch the portal's live counter at submission. |
 
 ## Portal submission reminders
 
