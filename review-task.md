@@ -15,7 +15,7 @@ Status values: `Pending` · `In progress` · `Done` · `Skipped` · `N/A`
 | # | Priority | Task | Details | Status |
 |---|---|---|---|---|
 | 2 | Must | Change "applies" → "uses" | In the sentence "then applies each item or escalates it to engineers." You apply a *rule*, not a knowledge *item*; the original formulation says "use the item." | Done |
-| 3 | Should | Change "Reported measures include" → "Measures include" | Cleaner, and saves one word toward the 250-word cap. | Pending |
+| 3 | Should | Change "Reported measures include" → "Measures include" | Cleaner, and saves one word toward the 250-word cap. | Done |
 | 4 | Optional | Punctuate "Copy Exactly" as "Copy Exactly!" | Intel's official program name has the exclamation mark. Most reviewers will accept either form. | Pending |
 
 ## Decisions to make
