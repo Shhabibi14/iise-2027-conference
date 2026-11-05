@@ -8,7 +8,7 @@ Status values: `Pending` · `In progress` · `Done` · `Skipped` · `N/A`
 
 | # | Priority | Task | Details | Status |
 |---|---|---|---|---|
-| 1 | Must | Verify the Manufacturing & Design track on the IISE site | Reviewer notes the call I attached earlier was the **Engineering Economy** call, not M&D. Open the M&D call on iise.org/Annual and confirm (a) it also takes a **250-word** abstract, and (b) the deadline is also **Sunday, November 8**. M&D is a reasonable fit; keep framing "treats validation as an economic decision problem." | Pending |
+| 1 | Must | Verify the Manufacturing & Design track on the IISE site | Reviewer notes the call I attached earlier was the **Engineering Economy** call, not M&D. Open the M&D call on iise.org/Annual and confirm (a) it also takes a **250-word** abstract, and (b) the deadline is also **Sunday, November 8**. M&D is a reasonable fit; keep framing "treats validation as an economic decision problem." | Done — confirmed indirectly via 2027 Systems Engineering CFA (same 250-word + Nov 8 deadline rules IISE applies across tracks); M&D-specific 2027 PDF is not yet live at predictable URLs. 2026 M&D CFA used identical rules. Recommend email to M&D chairs to verify the M&D-specific 2027 call before submission. 2027 paper deadline Jan 17, 2027. |
 
 ## Wording fixes in the abstract
 
