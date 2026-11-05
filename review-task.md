@@ -29,7 +29,7 @@ Status values: `Pending` · `In progress` · `Done` · `Skipped` · `N/A`
 
 | # | Priority | Task | Details | Status |
 |---|---|---|---|---|
-| 7 | Must | Do NOT paste the "Suggested Track" section into the portal | It is for planning only, and it contains two em dashes. | Pending |
+| 7 | Must | Do NOT paste the "Suggested Track" section into the portal | It is for planning only, and it contains two em dashes. | Done — moved the Suggested Track section out of abstract.md into a new `planning-notes.md`. abstract.md now contains only the title, abstract body, and keywords (portal-ready, no em dashes). |
 
 ## Already fine (no action)
 

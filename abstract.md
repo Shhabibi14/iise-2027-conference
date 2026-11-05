@@ -1,3 +1,5 @@
+<!-- Portal submission content only. Paste TITLE, ABSTRACT body, and KEYWORDS into the corresponding IISE portal fields. Planning notes (track choice) live in planning-notes.md. -->
+
 # Can We Still Trust Our Knowledge? Cost-Aware Validation of Manufacturing Knowledge After Production System Change
 
 ## Abstract
@@ -7,8 +9,3 @@ Over years of production, manufacturers learn which station is the bottleneck, h
 ## Keywords
 
 Manufacturing Knowledge Transfer; Knowledge Graphs; Bayesian Networks; Value of Information; Discrete-Event Simulation; Production Ramp-Up
-
-## Suggested Track
-
-- **Primary:** Manufacturing & Design (M&D) — fits "AI/ML in Manufacturing", "Semiconductor Manufacturing" (Intel Copy Exactly), "Cyber-Physical Manufacturing Systems", "Big Data Analytics in Manufacturing", and "Industry Applications of New Technologies".
-- **Second choice:** Operational Excellence (OpEx) — fits ramp-up, knowledge transfer, and cost-aware decision making.
