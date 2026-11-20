@@ -40,11 +40,11 @@ Hard deadline for revised paper: **January 17, 2027**.
 | m2 | Should | **Table 1 δ values look arbitrary.** Why does 4.1 s → 3.4 s give 0.7? | Give the rule — e.g. normalized difference or an elicitation scale. | Pending |
 | m3 | Should | **Shadow mode coverage** in Table 2 says "one item at a time", but shadow mode normally observes many items at once (itself a source of evidence sharing). | Correct Table 2 coverage for shadow mode. | Pending |
 | m4 | Should | **Time steps are mixed.** Decisions made per day, but latencies are in minutes and hours. | Unify time units, or state the mapping explicitly. | Pending |
-| m5 | Must | **Uncited references.** [11]–[15] are never cited in the text. In particular, cite [15] Terwiesch & Xu next to Copy Exactly! in the Introduction. | Cite each reference in the body, or remove unused ones. | Pending |
-| m6 | Should | **Overclaim.** Sec 4.2 says the framework "is designed to degrade gracefully (see Section 5)", but Sec 5 only *plans* to test this. | Soften to "will be tested for graceful degradation (Section 5)." | Pending |
-| m7 | Should | **Tone.** "Three honest overlaps" in Sec 6 is informal. | Change section heading to "Relation to prior work". | Pending |
-| m8 | Should | **Equation (1) layout.** The p_k^(0) term sits awkwardly. | Reformat equation; may resolve on its own once M2 rewrite happens. | Pending |
-| m9 | Should | **Heading styles mixed.** Sec 1–5 use small bold sans font, Sec 4.1–4.4 use larger serif font. | Normalize all heading styles to the IISE template. | Pending |
+| m5 | Must | **Uncited references.** [11]–[15] are never cited in the text. In particular, cite [15] Terwiesch & Xu next to Copy Exactly! in the Introduction. | Cite each reference in the body, or remove unused ones. | Done — [11] cited in Sec 5 (DES methodology); [12], [13] cited in Sec 4.3 and Sec 6; [14] cited in Sec 2 (CBM paragraph); [15] cited in Sec 1 (intro, next to Copy Exactly!). |
+| m6 | Should | **Overclaim.** Sec 4.2 says the framework "is designed to degrade gracefully (see Section 5)", but Sec 5 only *plans* to test this. | Soften to "will be tested for graceful degradation (Section 5)." | Done |
+| m7 | Should | **Tone.** "Three honest overlaps" in Sec 6 is informal. | Change section heading to "Relation to prior work". | Done — in-text phrasing changed to "The closest prior work overlaps the proposal in three places." |
+| m8 | Should | **Equation (1) layout.** The p_k^(0) term sits awkwardly. | Reformat equation; may resolve on its own once M2 rewrite happens. | Deferred — tied to M2 rewrite. |
+| m9 | Should | **Heading styles mixed.** Sec 1–5 use small bold sans font, Sec 4.1–4.4 use larger serif font. | Normalize all heading styles to the IISE template. | Deferred — pending F1 (proper 2027 IISE Word template). Markdown headings are already consistent; the mixed rendering is a template-style-map issue that only the correct IISE template can fix. |
 
 ---
 
@@ -52,12 +52,12 @@ Hard deadline for revised paper: **January 17, 2027**.
 
 | # | Priority | Issue | Fix | Status |
 |---|---|---|---|---|
-| F1 | Must | **Template header wrong.** Still reads "Proceedings of the 2020 IISE Annual Conference, L. Cromarty, R. Shirwaiker, P. Wang, eds." Also "Abstract ID: XXX" needs the real ID. | Use the 2027 template header. Fill real Abstract ID once IISE assigns it. | Pending |
-| F2 | Must | **Remove all `[CITATION NEEDED]` markers** and the internal note "docs/novelty.md" in [14]. | Replace every placeholder with a real citation (see F3 and F4) or cut the sentence. | Pending |
-| F3 | Must | **Reference [14] is likely fabricated.** No paper by Zhao, Kurz, Bemporad, Liberzon found. Real paper is: Xiujie Zhao, Piao Chen, Loon Ching Tang, "Condition-based maintenance via Markov decision processes: A review," *Front. Eng. Manag.*, 2025, 12(2): 330–342, DOI: 10.1007/s42524-024-4130-7. | Replace [14] with the real citation. Check every other reference against its source. | Pending |
-| F4 | Must | **Reference [10] cites wrong source for MiniFab.** The MIMAC report is for MIMAC datasets, not MiniFab. MiniFab is from Kempf, 1994 (Intel, five-machine six-step model). | Replace [10] with Kempf 1994 citation. | Pending |
-| F5 | Must | **Reference [2] page numbers.** Verify pages in IEEE Xplore (Wikipedia citation gives IEEE 414–417). | Confirm and set correct pages. | Pending |
-| F6 | Should | **Page ranges use "pp. 202 to 213"** — unusual. | Use plain hyphen: "pp. 202-213". Keeps the no-en-dash rule and looks standard. | Pending |
+| F1 | Must | **Template header wrong.** Still reads "Proceedings of the 2020 IISE Annual Conference, L. Cromarty, R. Shirwaiker, P. Wang, eds." Also "Abstract ID: XXX" needs the real ID. | Use the 2027 template header. Fill real Abstract ID once IISE assigns it. | Pending — need real 2027 template and assigned Abstract ID from user. |
+| F2 | Must | **Remove all `[CITATION NEEDED]` markers** and the internal note "docs/novelty.md" in [14]. | Replace every placeholder with a real citation (see F3 and F4) or cut the sentence. | Done — all 5 markers removed; refs [1], [2], [10], [14] updated; Section 6 BN-diagnosis sentence now cites [12], [13]. |
+| F3 | Must | **Reference [14] is likely fabricated.** No paper by Zhao, Kurz, Bemporad, Liberzon found. Real paper is: Xiujie Zhao, Piao Chen, Loon Ching Tang, "Condition-based maintenance via Markov decision processes: A review," *Front. Eng. Manag.*, 2025, 12(2): 330–342, DOI: 10.1007/s42524-024-4130-7. | Replace [14] with the real citation. Check every other reference against its source. | Done — [14] replaced with the Zhao, Chen, Tang 2025 paper. Other refs still need user verification before submission. |
+| F4 | Must | **Reference [10] cites wrong source for MiniFab.** The MIMAC report is for MIMAC datasets, not MiniFab. MiniFab is from Kempf, 1994 (Intel, five-machine six-step model). | Replace [10] with Kempf 1994 citation. | Done — [10] replaced with Kempf 1994 Intel MiniFab description. |
+| F5 | Must | **Reference [2] page numbers.** Verify pages in IEEE Xplore (Wikipedia citation gives IEEE 414–417). | Confirm and set correct pages. | Done — set to pp. 414-417 per reviewer's lead; user should still spot-check in IEEE Xplore before submission. |
+| F6 | Should | **Page ranges use "pp. 202 to 213"** — unusual. | Use plain hyphen: "pp. 202-213". Keeps the no-en-dash rule and looks standard. | Done — fixed in refs [4], [6], [8], [15]. |
 
 ---
 
