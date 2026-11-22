@@ -29,23 +29,21 @@ Manufacturing Knowledge Transfer; Knowledge Graphs; Bayesian Networks; Value of 
 
 ## 1. Introduction
 
-A production line accumulates operational knowledge over years: which station bottlenecks, how long a changeover takes, what scrap rate to expect at a given speed. This knowledge reduces the cost and variance of daily decisions. Equipment upgrade, reconfiguration, or relocation makes the stock uncertain: some items still hold in the new environment and some do not, and the firm cannot tell which. Intel's Copy Exactly! program [1], [2], [15] eliminates the selective question by revalidating everything, which minimizes false-belief risk at a high price. The opposite extreme reuses as-is, cheap when right and costly when wrong.
+A production line accumulates operational knowledge over years: which station bottlenecks, how long a changeover takes, what scrap rate to expect at a given speed. This knowledge reduces the cost and variance of daily decisions. Equipment upgrade, reconfiguration, or relocation makes the stock uncertain: some items still hold in the new environment and some do not, and the firm cannot tell which. Intel's Copy Exactly! program [1]-[3] eliminates the selective question by revalidating everything, which minimizes false-belief risk at a high price. The opposite extreme reuses as-is, cheap when right and costly when wrong.
 
 This paper addresses the intermediate decision: which items can still be trusted, which need verification, and which verification activity deserves the next unit of time and budget. We propose a framework with four components: change characterization, a knowledge graph of item-to-condition dependencies, a Bayesian trust model that routes evidence through the graph, and a cost-aware decision agent that picks activities by expected risk reduction per unit cost. The contribution is the combination of a graph-coupled posterior over per-item claims, a menu of heterogeneous evidence sources including a non-measurement option, and a sequential agent for a short ramp-up horizon with asymmetric cost of wrong decisions. We implement it, run it on a five-station DES testbed against four baselines, and report the cost-versus-incorrect-reuse frontier.
 
 ## 2. Related Work
 
-Four adjacent literatures inform this work; none alone solves the problem.
+Three literatures inform this work; none solves the problem alone.
 
-**Bayesian inspection and condition-based maintenance** models an asset with a hidden state, updates a belief from sensor evidence, and chooses when to inspect or replace, usually as a POMDP [3], [4], with structural-health extensions attaching value-of-information objectives [5]. The unit of analysis is a single asset, and the action menu excludes qualitatively different information sources such as formula re-derivation or expert judgment.
+**Ramp-up and knowledge transfer.** Ramp-up research models the trade-off between output and learning [4], and its decision-support models mostly act at the line or capacity level [5]. Transfer studies show that know-how is sticky and bound to its context [6], [7], which explains why Copy Exactly! [1]-[3] avoids selective reuse altogether. None represents individual knowledge items or gives a rule for validating them.
 
-**Value of information and correlated-belief policies.** Howard [8] and Raiffa and Schlaifer [9] are the foundations. Nearest to our coupling, Frazier, Powell, and Dayanik [16] develop the knowledge-gradient policy for correlated normal beliefs; Krause and Guestrin [17] give near-optimal nonmyopic VoI on graphical models. We differ in three ways: discrete binary validity rather than continuous means; a menu that includes a conditionally dependent non-measurement option; and an asymmetric economic cost of wrong use.
+**Bayesian networks and value of information.** Bayesian networks are established for reliability and fault diagnosis [8], [9], and decision-theoretic troubleshooting selects observations by expected cost [10], but these diagnose a fault in a fixed system. Value of information [11] underlies the knowledge-gradient policy for correlated beliefs [12] and optimal observation selection in graphical models [13]; inspection POMDPs attach value-of-information objectives to single assets [14]-[16]. These assume continuous beliefs or homogeneous sensors, not binary item validity, heterogeneous evidence including a non-measurement option, and asymmetric costs of wrong use.
 
-**Knowledge graphs and transportability.** Knowledge graphs provide a structured substrate for engineering knowledge [18]; transportability [19] formalizes when a relation learned in one environment carries to another. We use the former as the engineer-auditable dependency structure and operationalize the latter per item.
+**Knowledge graphs and transfer.** Knowledge graphs structure engineering knowledge [17], [18] but do not track whether each fact still holds after a change. Negative transfer [19] and transportability [20] formalize when source knowledge fails in a target environment, but neither prices the verification needed to find out.
 
-**Manufacturing knowledge transfer and ramp-up.** Terwiesch and Bohn [6] analyze the ramp-up learning trade-off; the Copy Exactly! literature [1], [2], [15] documents a policy that refuses to be selective. Neither represents individual knowledge items nor supplies a day-by-day rule over heterogeneous verification activities.
-
-The gap this paper fills is the combination: a graph-coupled posterior over per-item claims, a VoI-based rule over heterogeneous evidence sources including a conditionally dependent non-measurement option, and a sequential agent with explicit ramp-up budget and horizon.
+The gap is the combination: a graph-coupled posterior over per-item validity, a value-of-information rule over heterogeneous evidence sources including a conditionally dependent non-measurement option, and a sequential agent with an explicit ramp-up budget and horizon.
 
 ## 3. Problem Setting and Notation
 
@@ -99,7 +97,7 @@ $$
 \quad (3)
 $$
 
-An item is likely invalid if any factor it depends on has changed, with strength set by the edge weight. This replaces the Beta-prior formulation in the prior draft, which was inconsistent with a binary validity variable (fixes major concern M2 and resolves equation layout issue m8). Exact inference in this bipartite network is tractable at our scale (|K| up to 20, |F| up to 10) by summing over factor assignments [12], [13]. For scalability we use a mean-field factor posterior updated from item evidence by standard Bayes rule:
+An item is likely invalid if any factor it depends on has changed, with strength set by the edge weight. This replaces the Beta-prior formulation in the prior draft, which was inconsistent with a binary validity variable (fixes major concern M2 and resolves equation layout issue m8). Exact inference in this bipartite network is tractable at our scale (|K| up to 20, |F| up to 10) by summing over factor assignments [21], [22]. For scalability we use a mean-field factor posterior updated from item evidence by standard Bayes rule:
 
 $$
 p_k^{\mathrm{post}} = \frac{\mathcal{L}(e \mid V_k = 1)\,p_k^{\mathrm{prior}}}{\mathcal{L}(e \mid V_k = 1)\,p_k^{\mathrm{prior}} + \mathcal{L}(e \mid V_k = 0)\,(1 - p_k^{\mathrm{prior}})}
@@ -148,7 +146,7 @@ $$
 
 ### Testbed and ground truth
 
-Scenario S1 (equipment upgrade) runs on a five-station serial-flow line implemented in SimPy [11] (file `code/des_simulation.py`); station parameters follow a textbook alternating-bottleneck pattern (`paper/tables-sources.md`). The method's knowledge graph has eight items and five factors. For each instance the ground-truth graph $G_{\mathrm{oracle}}$ is drawn by keeping 70% of the method edges (with jittered weights), dropping 30%, and adding two *hidden* factors the method cannot see. Per-item ground truth $V_k^{\mathrm{true}}$ is sampled from a noisy-OR over $G_{\mathrm{oracle}}$ using visible plus hidden factor deltas, giving a 30% structural gap plus two latent factors between the method's beliefs and the simulator's truth. MiniFab [10] and a facility-relocation scenario are left for future work.
+Scenario S1 (equipment upgrade) runs on a five-station serial-flow line implemented in SimPy [23] (file `code/des_simulation.py`); station parameters follow a textbook alternating-bottleneck pattern (`paper/tables-sources.md`). The method's knowledge graph has eight items and five factors. For each instance the ground-truth graph $G_{\mathrm{oracle}}$ is drawn by keeping 70% of the method edges (with jittered weights), dropping 30%, and adding two *hidden* factors the method cannot see. Per-item ground truth $V_k^{\mathrm{true}}$ is sampled from a noisy-OR over $G_{\mathrm{oracle}}$ using visible plus hidden factor deltas, giving a 30% structural gap plus two latent factors between the method's beliefs and the simulator's truth. The Intel Mini-Fab benchmark [24] and a facility-relocation scenario are left for future work.
 
 ### Policies compared
 
@@ -176,9 +174,9 @@ The proposed agent beats B1 Full revalidation by 33% on total cost and B4 Random
 
 ## 6. Discussion and Relation to Prior Work
 
-The proposed framework supplies an integrated decision rule for post-change manufacturing knowledge validation that is item-level and cost-aware. Four overlaps are closest. CBM POMDPs with shared environmental factors [4], [5], [14] use a related coupling idea with continuous latent states; our discrete, engineer-auditable knowledge graph is designed for inspection. Knowledge-gradient for correlated beliefs [16] couples evidence through a covariance matrix on continuous means; we substitute a bipartite discrete structure with a noisy-OR item layer and a conditionally dependent non-measurement option. Near-optimal nonmyopic VoI on graphical models [17] addresses finite-horizon sensor placement; our setting is online with activity-type heterogeneity. Transportability [19] gives a semantic account of when relations carry across environments; we operationalize the question per item and price the answer.
+The proposed framework supplies an integrated decision rule for post-change manufacturing knowledge validation that is item-level and cost-aware. Four overlaps are closest. CBM POMDPs with shared environmental factors [14]-[16] use a related coupling idea with continuous latent states; our discrete, engineer-auditable knowledge graph is designed for inspection. Knowledge-gradient for correlated beliefs [12] couples evidence through a covariance matrix on continuous means; we substitute a bipartite discrete structure with a noisy-OR item layer and a conditionally dependent non-measurement option. Optimal VoI in graphical models [13] gives exact observation-selection algorithms for chain-structured models and shows that general structures are intractable; our setting is online, approximate, and heterogeneous in activity type. Transportability [20] gives a formal account of when relations carry across environments; we operationalize the question per item and price the answer.
 
-Limitations: the framework assumes an approximately correct knowledge graph; the four evidence sources are a fixed menu; and the agent is myopic. The testbed covers one scenario (S1); the MiniFab [10] model and a facility-relocation scenario are left for the journal version, together with corrupted-graph robustness and nonmyopic planning.
+Limitations: the framework assumes an approximately correct knowledge graph; the four evidence sources are a fixed menu; and the agent is myopic. The testbed covers one scenario (S1); the Mini-Fab model [24] and a facility-relocation scenario are left for the journal version, together with corrupted-graph robustness and nonmyopic planning.
 
 ## 7. Conclusion
 
@@ -190,40 +188,50 @@ We proposed and evaluated a framework for risk-aware and cost-effective validati
 
 ## References
 
-[1] C. J. McDonald, "The evolution of Intel's Copy EXACTLY! technology transfer method," *Intel Technology Journal*, Q4 1998.
+[1] C. J. McDonald, "The evolution of Intel's Copy EXACTLY! technology transfer method," *Intel Technology Journal*, vol. 2, no. 4, 1998.
 
 [2] C. J. McDonald, "Copy EXACTLY! A paradigm shift in technology transfer method," in *Proc. IEEE/SEMI Advanced Semiconductor Manufacturing Conf.*, 1997, pp. 414-417.
 
-[3] A. R. Cassandra, "A survey of POMDP applications," in *AAAI Fall Symp.*, 1998.
+[3] C. Terwiesch and Y. Xu, "The copy-exactly ramp-up strategy: Trading-off learning with process change," *IEEE Trans. Eng. Manag.*, vol. 51, no. 1, pp. 70-84, 2004.
 
-[4] K. G. Papakonstantinou and M. Shinozuka, "Planning structural inspection and maintenance policies via dynamic programming and Markov processes. Parts I and II," *Reliability Engineering and System Safety*, vol. 130, pp. 202-213, 214-224, 2014.
+[4] C. Terwiesch and R. E. Bohn, "Learning and process improvement during production ramp-up," *Int. J. Prod. Econ.*, vol. 70, no. 1, pp. 1-19, 2001.
 
-[5] C. P. Andriotis, K. G. Papakonstantinou, and E. N. Chatzi, "Value of structural health information in partially observable stochastic environments," *Structural Safety*, vol. 93, 102072, 2021.
+[5] C. H. Glock and E. H. Grosse, "Decision support models for production ramp-up: A systematic literature review," *Int. J. Prod. Res.*, vol. 53, no. 21, pp. 6637-6651, 2015.
 
-[6] C. Terwiesch and R. E. Bohn, "Learning and process improvement during production ramp-up," *International Journal of Production Economics*, vol. 70, no. 1, pp. 1-19, 2001.
+[6] G. Szulanski, "Exploring internal stickiness: Impediments to the transfer of best practice within the firm," *Strateg. Manag. J.*, vol. 17, no. S2, pp. 27-43, 1996.
 
-[7] L. Argote, *Organizational Learning*, 2nd ed. Springer, 2013.
+[7] M. J. Tyre and E. von Hippel, "The situated nature of adaptive learning in organizations," *Organ. Sci.*, vol. 8, no. 1, pp. 71-83, 1997.
 
-[8] R. A. Howard, "Information value theory," *IEEE Trans. Syst. Sci. Cybern.*, vol. 2, no. 1, pp. 22-26, 1966.
+[8] H. Langseth and L. Portinale, "Bayesian networks in reliability," *Reliab. Eng. Syst. Saf.*, vol. 92, no. 1, pp. 92-108, 2007.
 
-[9] H. Raiffa and R. Schlaifer, *Applied Statistical Decision Theory*. Harvard Business School, 1961.
+[9] B. Cai, L. Huang, and M. Xie, "Bayesian networks in fault diagnosis," *IEEE Trans. Ind. Inform.*, vol. 13, no. 5, pp. 2227-2240, 2017.
 
-[10] K. G. Kempf, "Intel five-machine six-step mini-fab description," Intel Corporation, Chandler, AZ, 1994.
+[10] D. Heckerman, J. S. Breese, and K. Rommelse, "Decision-theoretic troubleshooting," *Commun. ACM*, vol. 38, no. 3, pp. 49-57, 1995.
 
-[11] J. Banks, J. S. Carson, B. L. Nelson, D. M. Nicol, *Discrete-Event System Simulation*, 5th ed. Pearson, 2010.
+[11] R. A. Howard, "Information value theory," *IEEE Trans. Syst. Sci. Cybern.*, vol. 2, no. 1, pp. 22-26, 1966.
 
-[12] J. Pearl, *Probabilistic Reasoning in Intelligent Systems*. Morgan Kaufmann, 1988.
+[12] P. I. Frazier, W. B. Powell, and S. Dayanik, "The knowledge-gradient policy for correlated normal beliefs," *INFORMS J. Comput.*, vol. 21, no. 4, pp. 599-613, 2009.
 
-[13] D. Koller and N. Friedman, *Probabilistic Graphical Models*. MIT Press, 2009.
+[13] A. Krause and C. Guestrin, "Optimal value of information in graphical models," *J. Artif. Intell. Res.*, vol. 35, pp. 557-591, 2009.
 
-[14] X. Zhao, P. Chen, L. C. Tang, "Condition-based maintenance via Markov decision processes: A review," *Frontiers of Engineering Management*, vol. 12, no. 2, pp. 330-342, 2025, doi: 10.1007/s42524-024-4130-7.
+[14] K. G. Papakonstantinou and M. Shinozuka, "Planning structural inspection and maintenance policies via dynamic programming and Markov processes. Part I: Theory; Part II: POMDP implementation," *Reliab. Eng. Syst. Saf.*, vol. 130, pp. 202-213 and 214-224, 2014.
 
-[15] C. Terwiesch and Y. Xu, "The copy-exactly ramp-up strategy," *IEEE Trans. Eng. Management*, vol. 51, no. 1, pp. 70-84, 2004.
+[15] C. P. Andriotis, K. G. Papakonstantinou, and E. N. Chatzi, "Value of structural health information in partially observable stochastic environments," *Struct. Saf.*, vol. 93, 102072, 2021.
 
-[16] P. I. Frazier, W. B. Powell, S. Dayanik, "The knowledge-gradient policy for correlated normal beliefs," *INFORMS J. Computing*, vol. 21, no. 4, pp. 599-613, 2009.
+[16] X. Zhao, P. Chen, and L. C. Tang, "Condition-based maintenance via Markov decision processes: A review," *Front. Eng. Manag.*, vol. 12, no. 2, pp. 330-342, 2025.
 
-[17] A. Krause and C. Guestrin, "Near-optimal nonmyopic value of information in graphical models," in *UAI*, 2005, pp. 324-331.
+[17] A. Hogan et al., "Knowledge graphs," *ACM Comput. Surv.*, vol. 54, no. 4, pp. 1-37, 2022.
 
-[18] A. Hogan et al., "Knowledge graphs," *ACM Computing Surveys*, vol. 54, no. 4, art. 71, 2022.
+[18] G. Buchgeher, D. Gabauer, J. Martinez-Gil, and L. Ehrlinger, "Knowledge graphs in manufacturing and production: A systematic literature review," *IEEE Access*, vol. 9, pp. 55537-55554, 2021.
 
-[19] J. Pearl and E. Bareinboim, "Transportability of causal and statistical relations: A formal approach," in *AAAI*, 2011, pp. 247-254.
+[19] W. Zhang, L. Deng, L. Zhang, and D. Wu, "A survey on negative transfer," *IEEE/CAA J. Autom. Sinica*, vol. 10, no. 2, pp. 305-329, 2023.
+
+[20] J. Pearl and E. Bareinboim, "External validity: From do-calculus to transportability across populations," *Stat. Sci.*, vol. 29, no. 4, pp. 579-595, 2014.
+
+[21] J. Pearl, *Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference*. San Mateo, CA: Morgan Kaufmann, 1988.
+
+[22] D. Koller and N. Friedman, *Probabilistic Graphical Models: Principles and Techniques*. Cambridge, MA: MIT Press, 2009.
+
+[23] J. Banks, J. S. Carson, B. L. Nelson, and D. M. Nicol, *Discrete-Event System Simulation*, 5th ed. Upper Saddle River, NJ: Pearson, 2010.
+
+[24] J. A. Ramirez-Hernandez and E. Fernandez, "A simulation-based approximate dynamic programming approach for the control of the Intel Mini-Fab benchmark model," in *Proc. Winter Simulation Conf.*, 2009, pp. 1634-1645.
